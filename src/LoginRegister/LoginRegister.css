@@ -1,0 +1,52 @@
+.background-image {
+    background-image: url('./../Images/BackgroundImage.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    border: none;
+}
+
+.login-card {
+    width: 400px;
+    margin: auto;
+    padding: 30px;
+    background-color: #ffffffed;
+    -webkit-box-shadow: -3px 1px 16px 4px rgba(196, 186, 196, 0.75);
+    -moz-box-shadow: -3px 1px 16px 4px rgba(196, 186, 196, 0.75);
+    box-shadow: -3px 1px 16px 4px rgba(196, 186, 196, 0.75);
+}
+
+.mb-3 input[type="email"],
+.mb-3 input[type="password"],
+.mb-3 input[type="text"] {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.btn-color {
+    background-color: #853ff1;
+    border: #853ff1;
+    color: white;
+}
+
+.btn-color:focus, .btn-color:hover{
+    color: white;
+}
+
+.btn-link{
+    display: flex;
+}
+
+
+.link{
+    display: flex;
+    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    text-decoration: underline;
+}
+
+.link:focus, .link:hover{
+    display: flex;
+    color: rgba(var(--bs-link-color-rgb),var(--bs-link-opacity,1));
+    text-decoration: underline;
+}
