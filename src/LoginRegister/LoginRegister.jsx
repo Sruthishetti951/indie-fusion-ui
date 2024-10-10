@@ -8,20 +8,17 @@ function LoginSignUp() {
 
     const registerHandler=()=>{
         setIsLogin(false);
-        console.log("Inside register");
     }
 
     const loginHandler=()=>{
         setIsLogin(true);
-        console.log("Inside Login")
     }
 
     return (
         <Fragment>
             <form>
-                <div className="container">
-                    <div className='card background-image'>
-                        <div className='d-flex justify-content-center card login-card'>
+                <div className="container container-card">
+                        <div className='d-flex justify-content-center login-card'>
                             <div>
                                 <div className='d-flex justify-content-around mb-5'>
                                     <ul className="nav nav-pills nav-fill">
@@ -39,7 +36,6 @@ function LoginSignUp() {
                                 <RegisterUI loginHandler={loginHandler}/>}  
                             </div>
                         </div>
-                    </div>
                 </div>
             </form>
         </Fragment>

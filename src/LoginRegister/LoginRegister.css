@@ -1,10 +1,7 @@
-.background-image {
-    background-image: url('./../Images/BackgroundImage.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+
+.container-card{
     height: 100vh;
-    border: none;
+    display: flex;
 }
 
 .login-card {
@@ -25,8 +22,8 @@
 }
 
 .btn-color {
-    background-color: #853ff1;
-    border: #853ff1;
+    background-color: #853ff1 !important;
+    border: #853ff1 !important;
     color: white;
 }
 

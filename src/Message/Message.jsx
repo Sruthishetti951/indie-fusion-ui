@@ -5,7 +5,7 @@ function Message() {
         <Fragment>
             <form>
                 <div className="container">
-                    <div className='card background-image'>
+                    <div className='card'>
                         <div className='d-flex justify-content-center card login-card'>
                             <div>
                                 <div className='d-flex justify-content-around mb-3'>

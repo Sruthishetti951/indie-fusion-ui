@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { Link } from "react-router-dom";
 
 function LoginUI(props) {
     return (
@@ -18,7 +19,7 @@ function LoginUI(props) {
                 </div>
                 <div className="mb-3">
                     <input type="password" id="pass" />
-                    <p className='text-end mt-2'><a href='#'>Forgot Password? </a></p>
+                    <p className='text-end mt-2'><Link to={'/forgot-password'}>Forgot Password? </Link></p>
                 </div>
                 </Fragment>
                 <Fragment>

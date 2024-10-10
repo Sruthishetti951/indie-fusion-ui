@@ -1,11 +1,12 @@
 import { Fragment } from "react";
+import './ResetPassword.css'
+import { Link } from "react-router-dom";
 
 function ResetPassword(){
     return (
         <Fragment>
             <form>
-                <div className="container">
-                    <div className='card background-image'>
+                <div className="container container-card">
                         <div className='d-flex justify-content-center card login-card'>
                             <div>
                                 <div className='d-flex justify-content-around mb-5'>
@@ -42,14 +43,13 @@ function ResetPassword(){
                                         </div>
                                         <div className="d-flex justify-content-center">
                                         <i className="fa fa-long-arrow-left mt-1" aria-hidden="true"></i>
-                                        <p className="fontSize">Back to Login</p>
+                                        <p className="fontSize"><Link to={'/login'}>Back to Login</Link></p>
                                         </div>
                                     </Fragment>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </form>
         </Fragment>
     );
