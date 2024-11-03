@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import './LoginRegister.css';
+import styles from './LoginRegister.module.css';
 import LoginUI from './LoginUI';
 import RegisterUI from './RegisterUI';
 
@@ -16,18 +16,18 @@ function LoginSignUp() {
 
     return (
         <Fragment>
-            <form>
-                <div className="container container-card">
-                        <div className='d-flex justify-content-center login-card'>
+            <div>
+                <div className={`container ${styles["container-card"]}`}>
+                        <div className={`d-flex justify-content-center ${styles["login-card"]}`}>
                             <div>
                                 <div className='d-flex justify-content-around mb-5'>
                                     <ul className="nav nav-pills nav-fill">
                                         <li className="nav-item">
-                                            <button type="button"  className={`nav-link ${isLogin ? 'btn-color' : ''}`}
+                                            <button type="button"  className={`nav-link ${isLogin ? styles['btn-color'] : ''}`}
                                             onClick={()=>loginHandler()}>Login</button>
                                         </li>
                                         <li className="nav-item">
-                                            <button type="button" className={`nav-link btn-link ${!isLogin ? 'btn-color' : ''}`}
+                                            <button type="button" className={`nav-link ${styles["btn-link"]} ${!isLogin ? styles['btn-color'] : ''}`}
                                             onClick={()=>registerHandler()}>Register</button>
                                         </li>
                                     </ul>
@@ -37,7 +37,7 @@ function LoginSignUp() {
                             </div>
                         </div>
                 </div>
-            </form>
+            </div>
         </Fragment>
     );
 }

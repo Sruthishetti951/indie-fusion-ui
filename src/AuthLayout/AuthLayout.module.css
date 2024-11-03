@@ -1,0 +1,25 @@
+.postContainer {
+    display: flex;
+    border: 0.2px solid lightgray;
+    width: 90%;
+    margin: auto;
+    column-gap: 10px;
+    box-shadow: 2px 2px 2px 2px lightgrey;
+    border-radius: 5px;
+    height: 97vh;
+    margin-top: 10px;
+}
+
+
+.main-posts{
+    padding: 20px;
+    width: 80%;
+    overflow-y: scroll; /* Enable vertical scroll */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+  
+    /* For Webkit browsers like Chrome and Safari */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+}
