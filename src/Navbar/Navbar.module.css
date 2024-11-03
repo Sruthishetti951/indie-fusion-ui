@@ -1,0 +1,32 @@
+
+.side-nav-bar{
+    background-color: #d3d3d31f;
+    padding: 20px;
+    width: 20%;
+}
+
+
+.title {
+    font-size: 30px;
+    font-weight: 600;
+    font-family: cursive;
+}
+
+.remove-anchor-defaults {
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-containers {
+    font-size: 20px;
+    font-family: auto;
+    padding-bottom: 10px;
+}
+.icon-name-font{
+    padding-right: 5px;
+}
+
+.nav-names {
+    padding-left: 10px;
+}

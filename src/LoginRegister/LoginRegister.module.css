@@ -14,9 +14,7 @@
     box-shadow: -3px 1px 16px 4px rgba(196, 186, 196, 0.75);
 }
 
-.mb-3 input[type="email"],
-.mb-3 input[type="password"],
-.mb-3 input[type="text"] {
+.input-box {
     width: 100%;
     border-radius: 8px;
 }
