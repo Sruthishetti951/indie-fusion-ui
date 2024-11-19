@@ -1,18 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Create.module.css'
 import axios from 'axios';
 import { API_URL } from '../appConfig';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getIsImageFormat, openToast } from '../Utils/utils';
+import { getIsImageFormat, openToast, POST_TYPES } from '../Utils/utils';
 
 
 function Create() {
     const params = useParams();
-    const defaultFormState = {
+    const defaultFormState = useMemo(() => ({
         "text": "",
         media: "",
-        "type": "SELF"
-    }
+        "type": "SELF",
+        "title": "",
+        "startDate": "",
+        endDate: ""
+    }), [])
     const [formState, setFormState] = useState(defaultFormState);
     const [isImage, setIsImage] = useState(true);
 
@@ -22,6 +25,32 @@ function Create() {
     const [isLoading, setIsLoading] = useState(false);
     const [blobPost, setBlobPost] = useState('');
     const [ispreview, setIsPreview] = useState(false);
+    const [isOnlyText, setIsOnlyText] = useState(false);
+
+    const getPostDetailsByID = useCallback(() => {
+        const userId = localStorage.getItem('USER_ID');
+        axios.get(`${API_URL}/post/${userId}/${params?.postId}`).then((res) => {
+            if (res.data?.data) {
+                const responseData = res.data.data;
+                setFormState({
+                    text: responseData.text,
+                    type: responseData.type,
+                    title: responseData?.title
+                });
+                if (responseData?.mediaUrl) {
+                    setBlobPost(`${API_URL}/${responseData.mediaUrl}`);
+                    setIsPreview(true);
+                    setIsImage(getIsImageFormat(responseData?.mediaUrl));
+                } else {
+                    setIsOnlyText(true);
+                }
+            } else {
+                openToast("Not able to fetch the data now... Try again later... ");
+            }
+        }).catch((e) => {
+            openToast("Something went wrong... Please try again");
+        })
+    }, [params?.postId]);
 
     useEffect(() => {
         if (params.postId) {
@@ -30,28 +59,9 @@ function Create() {
             setIsPreview(false);
             setFormState(defaultFormState)
         }
-    }, [params?.postId]);
+    }, [params?.postId, defaultFormState, getPostDetailsByID]);
 
-    const getPostDetailsByID = () => {
-        const userId = localStorage.getItem('USER_ID');
-        axios.get(`${API_URL}/post/${userId}/${params?.postId}`).then((res) => {
-            if (res.data?.data) {
-                const responseData = res.data.data;
-                console.log(responseData);
-                setFormState({
-                    text: responseData.text,
-                });
-                setIsPreview(true);
-                if (responseData?.mediaUrl) {
-                    setBlobPost(`${API_URL}/${responseData.mediaUrl}`);
-                }
-            } else {
-                openToast("Not able to fetch the data now... Try again later... ");
-            }
-        }).catch((e) => {
-            openToast("Something went wrong... Please try again");
-        })
-    }
+
 
     const onPostImage = (event) => {
         if (event?.target?.files?.[0]) {
@@ -73,6 +83,10 @@ function Create() {
         } else {
             createPost()
         }
+    }
+
+    const backToHome = () => {
+        navigate('/dashboard');
     }
 
     const createPost = async () => {
@@ -130,21 +144,68 @@ function Create() {
 
     }
 
+    const getIsDisabled = useCallback(() => {
+        if (formState.type === POST_TYPES.SELF) {
+            return isLoading || (!ispreview && !formState.text)
+        } else if (POST_TYPES.EVENT === formState.type) {
+            if (!formState.startDate || !formState.endDate || !formState.title) {
+                return true;
+            }
+            return isLoading || (!ispreview && !formState.text);
+        } else {
+            if (!formState.title) {
+                return false;
+            }
+            return isLoading || (!ispreview && !formState.text);
+        }
+    }, [ispreview, formState, isLoading]);
+
 
     return (
         <div className={styles["createPostCard"]}>
-            <div className={`card p-3 styles["post-height"]`}>
-                <div>
-                    <label htmlFor="text" >{params.postId ? "Update" : "Create"}</label>
+            <div className={`card p-3 ${styles["post-height"]}`}>
+                <div className={`d-flex justify-content-between mb-3`}>
+                    <div className={`${styles["font-size-family"]}`}>
+                        <label htmlFor="text" >{params.postId ? "Update Post" : "Create Post"}</label>
+                    </div>
+                    <div>
+                        <label htmlFor="collabPost" className={`${styles["font-size-family"]}`} >Post Type</label>
+                        <select className={`${styles["input-box"]}`} id='collabPost' disabled={params.postId}
+                            value={formState.type} onChange={(event) => setFormState({ ...formState, type: event.target.value })}>
+                            <option value={POST_TYPES.SELF} className={`text-capitalize`}>Self</option>
+                            <option value={POST_TYPES.COLLAB} className='text-capitalize'>Collab</option>
+                            <option value={POST_TYPES.EVENT} className='text-capitalize'>Event</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div>
                     <div className={`mb-3`}>
+                        {formState?.type !== POST_TYPES.SELF && <div className="form-floating">
+                            <input className="form-control" placeholder="Title" id="title" value={formState.title} onChange={(event) => setFormState({ ...formState, title: event.target.value })} />
+                            <label htmlFor="title">Title</label>
+                        </div>}
+                    </div>
+                    <div className={`mb-3`}>
+                        {formState?.type === POST_TYPES.EVENT && <div className="form-floating">
+                            <input type='date' className="form-control" placeholder="Start Date" id="start-date" value={formState.startDate} onChange={(event) => setFormState({ ...formState, startDate: event.target.value })} />
+                            <label htmlFor="start-date">Start Date</label>
+                        </div>}
+                    </div>
+
+                    <div className={`mb-3`}>
+                        {formState?.type === POST_TYPES.EVENT && <div className="form-floating">
+                            <input type='date' className="form-control" placeholder="End Date" id="end-date" value={formState.endDate} onChange={(event) => setFormState({ ...formState, endDate: event.target.value })} />
+                            <label htmlFor="end-date">End Date</label>
+                        </div>}
+                    </div>
+                    <div className={`mb-3`}>
                         <div className="form-floating">
-                            <textarea style={{height: '100px'}} className="form-control" placeholder="Type Here...." id="floatingTextarea" rows={5} value={formState.text} onChange={(event) => setFormState({ ...formState, text: event.target.value })}></textarea>
+                            <textarea style={{ height: '100px' }} className="form-control" placeholder="Type Here...." id="floatingTextarea" rows={5} value={formState.text} onChange={(event) => setFormState({ ...formState, text: event.target.value })}></textarea>
                             <label htmlFor="floatingTextarea">Status</label>
                         </div>
                     </div>
-                    <div className={`d-flex justify-content-center align-items-center ${styles["image-upload"]} ${(!params.id && !ispreview) ? styles['withBackground'] : ''}`}>
+                    {!isOnlyText && <div className={`d-flex justify-content-center align-items-center ${styles["image-upload"]} ${(!params.id && !ispreview) ? styles['withBackground'] : ''}`}>
 
                         {!ispreview ?
                             <>
@@ -157,10 +218,16 @@ function Create() {
                                 {
                                     isImage ? <img src={blobPost} alt="postImage" /> : <video src={blobPost} controls />
                                 }
-                            </div>}
-                    </div>
+                            </div>
+                        }
+                    </div>}
                     <div className={'d-flex justify-content-center pt-3'}>
-                        <button className={'btn btn-primary'} onClick={profileHandler} disabled={isLoading}>{params.postId ? "Update" : "Create"}</button>
+                        <div >
+                            <button className={'btn btn-primary'} onClick={() => backToHome()} disabled={isLoading}>Cancel</button>
+                        </div>
+                        <div className={'ms-3'}>
+                            <button className={'btn btn-primary'} onClick={profileHandler} disabled={getIsDisabled()}>{params.postId ? "Update" : "Create"}</button>
+                        </div>
                     </div>
                 </div>
             </div>

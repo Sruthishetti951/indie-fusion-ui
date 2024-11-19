@@ -1,25 +1,27 @@
-.createPostCard{
-/* border: 1px solid lightgrey; */
-width: 100%;
-border-radius: 5px;
-padding: 20px;
-height: 100vh;
+.createPostCard {
+    width: 100%;
+    border-radius: 5px;
+    padding: 20px;
+    height: 100vh;
 }
 
 .input-box {
     width: 100%;
 }
 
-.icon{
+.icon {
     font-size: 40px;
+    color: #853ff1;
 }
 
-.image-upload{
+.image-upload {
     height: 300px;
-    
+
 }
+
 .withBackground {
     background-color: #d3d3d34a;
+    display: none;
 }
 
 .image-upload img {
@@ -27,16 +29,21 @@ height: 100vh;
     width: 100%;
 }
 
-.image-upload video  {
+.image-upload video {
     height: 300px;
     width: 100%;
 }
 
-.text-area{
+.text-area {
     height: 100px;
 }
 
-.post-height{
+.post-height {
     padding: 10px;
-    height: 550px;
+    border: none;
+    background: #853ff112;
+}
+.font-size-family{
+    font-family: sans-serif;
+    font-size: 18px;
 }

@@ -15,7 +15,7 @@ function AuthLayout() {
     return (
         <div className={styles["postContainer"]}>
             <Navbar />
-            <div className={styles["main-posts"]}>
+            <div className={`${styles["main-posts"]}`}>
 
                 <Outlet />
             </div>

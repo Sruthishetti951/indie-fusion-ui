@@ -22,3 +22,40 @@ export const openToast = (message, isError = true) => {
         transition: Bounce,
     });
 }
+
+export const NOTIFICATION_TYPES = {
+    GROUP: 'GROUP',
+    COLLAB: 'COLLAB'
+}
+
+export const STATUS = {
+    APPROVED: "APPROVED",
+    REQUESTED: "REQUESTED",
+    REJECTED: "REJECTED"
+}
+
+export const POST_TYPES = {
+    SELF: "SELF",
+    EVENT: "EVENT",
+    COLLAB: "COLLAB"
+}
+
+// If the post is not created by current user
+export const getMemberFromMembers = (members) => {
+    const userId = localStorage.getItem("USER_ID");
+    return members?.find((obj) => userId === obj.userId);
+}
+
+export const capitalizeParagraph = (paragraph) => {
+    const sentences = paragraph.split(/([.!?])\s*/);
+
+    const capitalizedSentences = sentences.map((sentence, index) => {
+        if (index % 2 === 0) {
+            return sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase();
+        }
+        return sentence;
+    });
+
+    return capitalizedSentences.join('');
+}
+
