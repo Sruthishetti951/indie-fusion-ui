@@ -1,0 +1,128 @@
+  .navbar .nav-item {
+    color: #000; /* Bootstrap primary blue */
+    text-decoration: none;
+    font-size: 18px;
+    padding: 13px 0;
+    font-family: 'Cambria';
+    font-weight: bold;
+   }
+  
+  .navbar .nav-item:hover {
+    color: #525151; /* Darker blue on hover */
+    }
+  
+  .navbar .nav-item.active {
+    color: #343a40; /* Dark text */
+   }
+  
+   .main-container .section1{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+   }
+   
+   .main-container .section1 .left-col{
+    text-align: center;
+    margin: 10% auto ;
+   }
+   .main-container .section1 .left-col h1{
+    font-family: 'Algerian';
+    font-size: clamp(16px, 10vw, 200px);
+    line-height: 0.8;
+   }
+   .main-container .section1 .left-col p{
+    font-family: 'Cursive';
+   }
+   .main-container .section1 .right-col img{
+    width: 100%; 
+  height: auto;
+  max-width: 100%;
+  max-height: 100%; 
+  object-fit: cover;
+   }
+
+   .main-container .section2 h1{
+    font-family: 'Cambria';
+    font-size: clamp(16px, 2vw, 40px);
+    line-height: 0.8;
+    text-align: center;
+   }
+
+/* Cards Section */
+.cards-section {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+    position: relative;
+  }
+  
+  .card-col {
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    position: relative;
+    padding: 10px;
+    /* margin: 0 5px; Space between cards */
+  }
+  
+  /* Active Card Styles */
+  .active-card {
+    z-index: 10;
+  }
+  
+  .active-card .card {
+    transform: scale(1); /* Enlarge active card */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    margin-top: -50px; /* Brings the active card slightly forward */
+    padding: 50px;  /* Adds spacing for the active card */
+    transition: all 0.3s ease-in-out;
+  }
+  .active-card .card p{
+    font-size: 20px;
+    line-height: normal;
+  }
+  
+  /* Non-Active Cards */
+  .card-col:not(.active-card) {
+    opacity: 0.6; /* Slightly fades inactive cards */
+  }
+  
+  .card-col:not(.active-card):hover {
+    opacity: 0.8; /* Slightly less faded on hover */
+  }
+  
+  /* General Card Styling */
+  .card {
+    background-color: #202020;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: white;
+    padding: 30px;
+  }
+  
+  .card-image {
+    text-align: center;
+    width: 100%;
+    height: auto;
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+    margin: auto;
+  }
+  
+  .card p {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  .section3{
+    margin: 30px 0;
+    padding: 30px 0;
+  }
+  .section3 h1{
+    text-align: center;
+    padding: 50px 0;
+
+  }
+  

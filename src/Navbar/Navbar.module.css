@@ -1,8 +1,17 @@
 
 .side-nav-bar{
-    background-color: #d3d3d31f;
+    background-color:#853ff10f;
     padding: 20px;
     width: 20%;
+    margin: 20px;
+}
+
+.side-nav-bar *{
+    color:black;
+}
+.side-nav-bar p{
+    font-weight: 500;
+    font-family: cursive;
 }
 
 
@@ -17,6 +26,8 @@
     text-decoration: none;
     font-weight: 500;
 }
+
+
 
 .nav-containers {
     font-size: 20px;

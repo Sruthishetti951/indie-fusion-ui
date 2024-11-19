@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
 import styles from './MyProfilePage.module.css'
 import axios from 'axios';
 import { API_URL } from '../appConfig';
-import { getIsImageFormat, openToast } from '../Utils/utils';
-import { Link, useNavigate } from 'react-router-dom';
+import { capitalizeParagraph, getIsImageFormat, openToast, STATUS } from '../Utils/utils';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 const deafultProfileImage = '/Images/DefaultProfileImage.webp';
 const noPost = '/Images/no-posts.jpeg';
 
@@ -12,17 +12,20 @@ function MyProfilePage() {
     const navigate = useNavigate();
     const [modalShow, setModalShow] = useState(false);
     const [postIdForDelete, setPostIdForDelete] = useState(null);
-
+    const [messageModalPopup, setMessageModalPopup] = useState({
+        show: false,
+        message: ''
+    });
+    const [collabStatus, setCollabStatus] = useState(null);
+    const [details, setDetails] = useState(null);
 
     const [profileImage, setProfileImage] = useState(deafultProfileImage);
+    const [collabEnabled, setIsCollab] = useState(true);
     const [postList, setPostList] = useState([]);
+    const params = useParams();
 
-    useEffect(() => {
-        getAllPosts();
-    }, []);
-
-    const getAllPosts = () => {
-        const userId = localStorage.getItem('USER_ID');
+    const getAllPosts = useCallback(() => {
+        const userId = params?.profileId ?? localStorage.getItem('USER_ID');
         axios.get(`${API_URL}/post/${userId}`).then((res) => {
             if (res.data?.data) {
                 const responseData = res.data.data;
@@ -30,19 +33,46 @@ function MyProfilePage() {
                 if (responseData.imageUrl) {
                     setProfileImage(`${API_URL}/${responseData.imageUrl}`);
                 }
+                setDetails({
+                    profileDetails: responseData?.profileDetails,
+                    userDetails: responseData?.userDetails
+                })
+                if (responseData?.profileDetails) {
+                    
+                }
+                setIsCollab(responseData?.profileDetails?.openToCollab);
             } else {
                 openToast("Not able to fetch the data now... Try again later... ");
             }
         }).catch((e) => {
             openToast("Something went wrong... Please try again");
         })
-    }
+    }, [params?.profileId]);
+
+    const getCollabrationId = useCallback(() => {
+        if (!params.profileId) {
+            return;
+        }
+        const userId = localStorage.getItem("USER_ID");
+        const collabId = params.profileId;
+
+        axios.get(`${API_URL}/collab/${userId}/${collabId}`).then((res) => {
+            setCollabStatus(res.data?.data?.length ? res.data?.data?.[0] : null);
+        }).catch((e) => {
+            openToast('Something went wrong while fetching collab details ... Please try again');
+        })
+    }, [params.profileId]);
+
+    useEffect(() => {
+        getAllPosts();
+        getCollabrationId();
+    }, [getAllPosts, params.profileId, getCollabrationId]);
 
     const deleteBeforeConfirmation = (postId) => {
         setPostIdForDelete(postId._id);
         setModalShow(true);
     }
-    
+
     const deleteAfterConfirmation = () => {
         const userId = localStorage.getItem('USER_ID');
         axios.delete(`${API_URL}/post/${userId}/${postIdForDelete}`).then((res) => {
@@ -58,10 +88,112 @@ function MyProfilePage() {
             setModalShow(false);
         })
     }
+
+    const sendCollabration = useCallback(() => {
+        if (messageModalPopup.message) {
+            const userId = localStorage.getItem("USER_ID");
+            const collabId = params.profileId;
+            axios.post(`${API_URL}/collab/${userId}/${collabId}`, { message: messageModalPopup.message }).then((res) => {
+                setMessageModalPopup({
+                    show: false,
+                    message: ''
+                });
+                if (res.data?.data) {
+                    openToast('Request Sent Successfully', false);
+                    getCollabrationId();
+                } else {
+                    openToast('Not able to request... Please try again');
+                }
+            }).catch((e) => {
+                setMessageModalPopup({
+                    show: false,
+                    message: ''
+                });
+                openToast('Something went wrong ... Please try again');
+            })
+        } else {
+            openToast("Message is required");
+        }
+
+    }, [getCollabrationId, messageModalPopup.message, params.profileId]);
+
+
+    const onApproveOrReject = useCallback((isApproved) => {
+        if (!params.profileId) {
+            return;
+        }
+        const userId = localStorage.getItem("USER_ID");
+        const collabId = params.profileId;
+        axios.put(`${API_URL}/collab/${userId}/${collabId}/${isApproved}`).then((res) => {
+            if (res.data?.success) {
+                openToast(res.data?.message, false);
+                getCollabrationId();
+            } else {
+                openToast(res.data?.message);
+            }
+        }).catch((e) => {
+            openToast('Something went wrong ... Please try again');
+        })
+    }, [getCollabrationId, params.profileId]);
+
+    const onCancelRequest = useCallback((isApproved) => {
+        const userId = localStorage.getItem("USER_ID");
+        const collabId = params.profileId;
+        axios.put(`${API_URL}/collab/${collabId}/${userId}/${isApproved}`).then((res) => {
+            if (res.data?.success) {
+                openToast(res.data?.message, false);
+                getCollabrationId();
+            } else {
+                openToast(res.data?.message);
+            }
+        }).catch((e) => {
+            openToast('Something went wrong ... Please try again');
+        })
+    }, [getCollabrationId, params.profileId]);
+
+    const getCollabStatus = useMemo(() => {
+        const user_id = localStorage.getItem("USER_ID");
+        if (!collabStatus?.userId) {
+            return <button className='btn btn-primary' onClick={() => setMessageModalPopup({
+                show: true,
+                message: ''
+            })} disabled={!collabEnabled}>{'Request Collab'}</button>;
+        }
+        if (collabStatus?.status === STATUS.APPROVED) {
+            return <button className='btn btn-primary'>{'Collabed'}</button>;
+        }
+        if (collabStatus?.requestedTo?._id === user_id) {
+            return <>
+                <button className='btn btn-primary' onClick={() => onApproveOrReject(true)}>{'Approve'}</button> &nbsp;
+                <button className='btn btn-primary' onClick={() => onApproveOrReject(false)}>{'Reject'}</button>
+            </>
+        } else if (collabStatus?.userId?._id === user_id) {
+            return <>
+                <button className='btn btn-primary'>{capitalizeParagraph(collabStatus?.status)}</button>&nbsp;
+                <button className='btn btn-primary' onClick={() => onCancelRequest(false)}>{'Cancel Request'}</button>
+            </>;
+        }
+    }, [collabEnabled, collabStatus?.requestedTo?._id, collabStatus?.status, collabStatus?.userId, onApproveOrReject, onCancelRequest]);
+
+
     return (
-        <>
-            <div className={'d-flex justify-content-center'}>
-                <p className='fw-bold'>My Feed</p>
+        <div className={`${styles["container"]}`}>
+            <div>
+                <div className={`${styles["profile-container"]} ${styles["profile-image-grid"]}`}>
+                    <div className={`${styles["image-request-button"]}`}>
+                    <img src={profileImage} alt="" className={`${styles["image"]}`} alt={'Profile'}/>
+                        <div>
+                            {(params?.profileId && localStorage.getItem("USER_ID") !== params?.profileId) && getCollabStatus}
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <p className={`${styles["profile-name-font"]}`}>{`${details?.userDetails?.firstName} ${details?.userDetails?.lastName}`}</p>
+                            <p className={`${styles["profile-username-font"]}`}>{details?.userDetails?.userName}</p>
+                            <p className={`${styles["profile-bio-font"]}`}>{details?.profileDetails?.bio}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className={`${styles["main-container"]}`}>
                 {postList?.length > 0 ? postList.map((eachPost) => {
@@ -97,25 +229,22 @@ function MyProfilePage() {
                             <div>
                                 <p className={`${styles["menu-date"]}`}>{eachPost?.createdDate ? (new Date(eachPost.createdDate)).toDateString() : null}</p>
                             </div>
-                            <div className='d-flex justify-content-end'>
-                                {/* <div className='me-3'>
-                                    <i className={`fa fa-share-square ${styles["icon-size"]}`} aria-hidden="true"></i>
-                                </div> */}
+                            {localStorage.getItem("USER_ID") === params.profileId && <div className='d-flex justify-content-end'>
                                 <div className='me-3'>
-                                    <i className={`fa fa-pencil-square ${styles["icon-size"]}`} aria-hidden="true" onClick={() => navigate(`/create/${eachPost._id}`)}></i>
+                                    <i className={`fa fa-pencil-square ${styles["icon-size"]}`} aria-hidden="true" onClick={() => navigate(`/edit/${eachPost._id}`)}></i>
                                 </div>
                                 <div className='me-3'>
                                     <i className={`fa fa-trash ${styles["icon-size"]}`} aria-hidden="true"
                                         onClick={() => deleteBeforeConfirmation(eachPost)}></i>
                                 </div>
 
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 })
                     : <div className={'d-flex align-items-center flex-column pt-4'}>
                         <div>
-                            <img src={noPost} height={300} width={400} />
+                            <img src={noPost} height={300} width={400} alt='No Post Found' />
                         </div>
                         <div>
                             <Link to={'/create'}>Create Here</Link>
@@ -126,11 +255,20 @@ function MyProfilePage() {
                         <p>Are you sure you want to delete this post?</p>
                     </ConfirmationModal>
                 </div>
+
+                <div>
+                    {messageModalPopup.show && <ConfirmationModal show={messageModalPopup.show} handleClose={() => setMessageModalPopup({
+                        show: false,
+                        message: ''
+                    })} handleSubmit={() => sendCollabration()} title="Request Message" submitDisable={!messageModalPopup.message}>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a message here" id="floatingTextarea" onChange={(event) => setMessageModalPopup({ ...messageModalPopup, message: event.target.value })}></textarea>
+                            <label for="floatingTextarea">Your Request Message</label>
+                        </div>
+                    </ConfirmationModal>}
+                </div>
             </div>
-        </>
-
-
-
+        </div>
     )
 }
 

@@ -2,15 +2,13 @@
 	column-count: 2;
 }
 
-.profile-container {
-	padding: 20px;
+.profile-image-container {
+	border: 1px solid lightgray;
+	height: 300px;
 }
 
-.profile-image-grid{
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	align-items: center;
-	background-color: #853ff10f;
+.profile-container {
+	padding: 20px;
 }
 
 .container {
@@ -19,18 +17,11 @@
 	row-gap: 20px;
 }
 
-.image-request-button{
-    display: grid;
-    text-align: center;
-    justify-content: center;
-}
 .image{
-	height: 200px;
-	width: 200px;
-	margin-bottom: 10px;
+	height: 80px;
+	width: 80px;
 	border-radius: 50%;
-	box-shadow: 1px 1px 1px lightgrey;
-	justify-content: center;
+	margin-bottom: 10px;
 }
 
 .opacity {
@@ -108,7 +99,7 @@ svg {
 }
 
 .post-img {
-	width: 450px;
+	width: 449px;
 	height: 100%;
 	aspect-ratio: 9/9;
 }
@@ -126,28 +117,6 @@ svg {
 	font-size: 12px;
 	padding: 0 8px;
 }
-
-.profile-name-font{
-	font-family: 'FontAwesome';
-    font-size: 25px;
-    font-weight: 600;
-    font-style: oblique;
-}
-
-.profile-username-font{
-	font-family: 'FontAwesome';
-    font-size: larger;
-    font-weight: 600;
-    font-style: oblique;
-}
-
-.profile-bio-font{
-	font-family:cursive;
-    font-size: larger;
-    font-weight: 500;
-}
-
-
 
 .container-profile {
 	width: 451px;

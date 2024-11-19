@@ -25,7 +25,6 @@ function RegisterUI(props) {
     })
 
     const registerSubmitHandler = async (data) => {
-        console.log(data);
         setRegisterStatus({
             isLoading: true,
             errorMessage: '',
@@ -47,7 +46,6 @@ function RegisterUI(props) {
                 successMessage: ''
             })
         }
-        console.log(response);
     }
 
     return (

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { API_URL } from "../appConfig";
 import { openToast } from "../Utils/utils";
-import { toast } from "react-toastify";
 const deafultProfileImage = '/Images/DefaultProfileImage.webp';
 
 function Profile() {
@@ -37,7 +36,8 @@ function Profile() {
             "interestedIn": "",
             "country": "",
             "city": "",
-            "availability": true,
+            "isActive": false,
+            "openToCollab":false,
             "userId": localStorage.getItem("USER_ID")
         }
     }
@@ -56,7 +56,6 @@ function Profile() {
 
     useEffect(() => {
         const subscription = watch((value, { name, type }) => {
-            console.log(value, name, type);
             if (name === 'profile.country') {
                 const cities = countries.find((obj) => obj.country === value.profile.country)?.cities;
                 setCities(cities ?? []);
@@ -73,7 +72,6 @@ function Profile() {
                 const countryList = await getCountries();
                 setCountries(countryList);
             } catch (e) {
-                console.log("error fetching country", e);
                 openToast('unable to get countries');
             }
         }
@@ -159,7 +157,6 @@ function Profile() {
 
     const onImageChange = (event) => {
         if (event?.target?.files?.[0]) {
-            console.log(URL.createObjectURL(event.target.files[0]));
             setImage(URL.createObjectURL(event.target.files[0]));
             setProfilePicPayload(event.target.files[0]);
             setIsPreview(true);
@@ -176,9 +173,8 @@ function Profile() {
         }).then((UploadImage) => {
             setLoading(false);
             setIsPreview(false);
-            openToast('Profile picture successfully uploaded')
+            openToast('Profile picture successfully uploaded',false)
         }).catch((e) => {
-            console.log(e);
             setLoading(false);
             openToast('Something went wrong...Please try again..!')
         }).finally(() => {
@@ -198,7 +194,6 @@ function Profile() {
             const response = await axios.get(`${API_BASE_URL}`);
             return response.data.data
         } catch (e) {
-            console.log(e)
         }
     }
 
@@ -212,7 +207,7 @@ function Profile() {
                         <div>
                             <div className='d-flex justify-content-between pb-2'>
                                 <div>
-                                <h4>Profile Settings</h4>
+                                    <h4>Profile Settings</h4>
                                 </div>
                                 <div className='text-center'>
                                     <button type="submit" className="btn btn-primary btn-color" disabled={loading}>Update </button>
@@ -222,7 +217,7 @@ function Profile() {
                                 <div className={`d-flex justify-content-left ${styles["profile-image-card"]}`} >
                                     <div>
                                         <div>
-                                            <input type="file" id="profileImage" hidden htmlFor="profileImage" ref={referenceInput} onChange={(event) => onImageChange(event)} accept=".png, .jpeg, .jpg, .svg, .webp"/>
+                                            <input type="file" id="profileImage" hidden htmlFor="profileImage" ref={referenceInput} onChange={(event) => onImageChange(event)} accept=".png, .jpeg, .jpg, .svg, .webp" />
                                             <div className="d-flex justify-content-center">
                                                 <img src={image ?? deafultProfileImage} alt="ProfileImage" className={styles["profile-Image"]} />
                                             </div>
@@ -240,13 +235,13 @@ function Profile() {
                                                     </div>
                                                 </div>}
                                         </div>
-                                       
+
                                     </div>
 
-                                <div className={`d-flex justify-content-between ${styles["padding-left-20"]} `}>
-                                            <div className={styles["email-display"]}>
+                                    <div className={`d-flex justify-content-between ${styles["padding-left-20"]} `}>
+                                        <div className={styles["email-display"]}>
                                             <p className={`${styles["font-bold"]} mb-1`}>{userDetails.userName}</p>
-                                            <p className="mb-1">{userDetails.email}</p>                                       
+                                            <p className="mb-1">{userDetails.email}</p>
                                             <div className="mb-3">
                                                 <div className="form-check form-switch">
                                                     <input className="form-check-input" type="checkbox" id="openToCollab"
@@ -254,18 +249,26 @@ function Profile() {
                                                         ...register('profile.openToCollab')
                                                         }
                                                     />
-                                                    <label className="form-check-label" htmlFor="openToCollab">Active</label>
+                                                    <label className="form-check-label" htmlFor="openToCollab">Open To Collab</label>
+                                                </div>
+                                                <div className="form-check form-switch">
+                                                    <input className="form-check-input" type="checkbox" id="isActive"
+                                                        {
+                                                        ...register('profile.isActive')
+                                                        }
+                                                    />
+                                                    <label className="form-check-label" htmlFor="isActive">Active</label>
                                                 </div>
                                             </div>
-                                            </div>
                                         </div>
+                                    </div>
                                 </div>
 
                                 <div className={styles["form-grid"]}>
 
                                     <div>
                                         <div>
-                                            <label htmlFor="fname" >First Name</label>
+                                            <label htmlFor="fname" className={`${styles["required"]}`}>First Name</label>
                                         </div>
                                         <div className="mb-3">
                                             <input type="text" id="fname" className={`${styles["input-box"]}`}
@@ -281,7 +284,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="lname" >Last Name</label>
+                                            <label htmlFor="lname" className={`${styles["required"]}`}>Last Name</label>
                                         </div>
                                         <div className="mb-3">
                                             <input type="text" id="lname" className={`${styles["input-box"]}`}
@@ -296,7 +299,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="pNo" >Phone Number</label>
+                                            <label htmlFor="pNo" className={`${styles["required"]}`}>Phone Number</label>
                                         </div>
                                         <div className="mb-3">
                                             <input type="text" id="pNo" className={`${styles["input-box"]}`}
@@ -315,7 +318,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="address" >Address</label>
+                                            <label htmlFor="address" className={`${styles["required"]}`}>Address</label>
                                         </div>
                                         <div className="mb-3">
                                             <input type="text" id="address" className={`${styles["input-box"]}`}
@@ -331,7 +334,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="country" >Country</label>
+                                            <label htmlFor="country" className={`${styles["required"]}`}>Country</label>
                                         </div>
                                         <div className="mb-3">
                                             <select className={`${styles["input-box"]}`}
@@ -357,7 +360,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="city" >City</label>
+                                            <label htmlFor="city" className={`${styles["required"]}`}>City</label>
                                         </div>
                                         <div className="mb-3">
                                             <select type="text" id="city" className={`${styles["input-box"]}`}
@@ -381,7 +384,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="gender" >Gender</label>
+                                            <label htmlFor="gender" className={`${styles["required"]}`}>Gender</label>
                                         </div>
                                         <select className={`mb-3 ${styles["input-box"]}`} id="gender"
                                             {
@@ -400,7 +403,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="dob" >DOB</label>
+                                            <label htmlFor="dob" className={`${styles["required"]}`}>DOB</label>
                                         </div>
                                         <div className="mb-3">
                                             <input type="date" max={getMaxDate()} id="dob" className={`${styles["input-box"]}`} {
@@ -415,7 +418,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="skills" >Skills</label>
+                                            <label htmlFor="skills" className={`${styles["required"]}`}>Skills</label>
                                         </div>
                                         <div className="mb-3">
                                             <input type="text" id="skills" className={`${styles["input-box"]}`}
@@ -431,7 +434,7 @@ function Profile() {
 
                                     <div>
                                         <div>
-                                            <label htmlFor="interestedIn" >Interests</label>
+                                            <label htmlFor="interestedIn">Interests</label>
                                         </div>
                                         <div className="mb-3">
                                             <input type="text" id="interestedIn" className={`${styles["input-box"]}`}
@@ -451,15 +454,13 @@ function Profile() {
                                         <div className="mb-3">
                                             <textarea id="bio" className={`${styles["input-box"]}`}
                                                 {
-                                                ...register('profile.bio', {
-                                                    required: "bio are required"
-                                                })
+                                                ...register('profile.bio')
                                                 } ></textarea>
                                             <p className="text-danger">{errors.profile?.bio?.message}</p>
                                         </div>
                                     </div>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
