@@ -40,7 +40,7 @@ function LoginUI(props) {
                 });
                 reset();
                 localStorage.setItem('USER_ID', response.data.data?._id);
-                navigation('/dashboard');
+                navigation('/profile-update');
             } else {
                 setLoginStatus({
                     isLoading: false,

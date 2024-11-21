@@ -5,8 +5,9 @@ import axios from 'axios';
 import { API_URL } from '../appConfig';
 import { capitalizeParagraph, getIsImageFormat, openToast, STATUS } from '../Utils/utils';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import NoDataFound from '../shared/components/NodataFound/NoDataFound';
+import LoadingIndicator from '../shared/components/LoadingIndicator/LoadingIndicator';
 const deafultProfileImage = '/Images/DefaultProfileImage.webp';
-const noPost = '/Images/no-posts.jpeg';
 
 function MyProfilePage() {
     const navigate = useNavigate();
@@ -21,15 +22,25 @@ function MyProfilePage() {
 
     const [profileImage, setProfileImage] = useState(deafultProfileImage);
     const [collabEnabled, setIsCollab] = useState(true);
-    const [postList, setPostList] = useState([]);
+    const [postList, setPostList] = useState({
+        loading: false,
+        data: []
+    });
     const params = useParams();
 
     const getAllPosts = useCallback(() => {
+        setPostList({
+            loading: true,
+            data: null
+        });
         const userId = params?.profileId ?? localStorage.getItem('USER_ID');
         axios.get(`${API_URL}/post/${userId}`).then((res) => {
             if (res.data?.data) {
                 const responseData = res.data.data;
-                setPostList(responseData.posts?.reverse());
+                setPostList({
+                    loading: false,
+                    data: responseData.posts?.reverse()
+                });
                 if (responseData.imageUrl) {
                     setProfileImage(`${API_URL}/${responseData.imageUrl}`);
                 }
@@ -38,7 +49,7 @@ function MyProfilePage() {
                     userDetails: responseData?.userDetails
                 })
                 if (responseData?.profileDetails) {
-                    
+
                 }
                 setIsCollab(responseData?.profileDetails?.openToCollab);
             } else {
@@ -154,13 +165,20 @@ function MyProfilePage() {
     const getCollabStatus = useMemo(() => {
         const user_id = localStorage.getItem("USER_ID");
         if (!collabStatus?.userId) {
+            if (!collabEnabled) {
+                return <div className={`badge bg-secondary btn-sm`}>
+                Collab Unavailable
+            </div>
+            }
             return <button className='btn btn-primary' onClick={() => setMessageModalPopup({
                 show: true,
                 message: ''
-            })} disabled={!collabEnabled}>{'Request Collab'}</button>;
+            })}>{'Request Collab'}</button>;
         }
         if (collabStatus?.status === STATUS.APPROVED) {
-            return <button className='btn btn-primary'>{'Collabed'}</button>;
+            return <div className={`badge bg-secondary btn-sm`}>
+                Collabed
+            </div>
         }
         if (collabStatus?.requestedTo?._id === user_id) {
             return <>
@@ -175,99 +193,116 @@ function MyProfilePage() {
         }
     }, [collabEnabled, collabStatus?.requestedTo?._id, collabStatus?.status, collabStatus?.userId, onApproveOrReject, onCancelRequest]);
 
+    const postListMemo = useCallback((eachPost) => {
+        return <div className={`${styles["container-profile"]}`} key={eachPost._id}>
+            <div className={`${styles["header-data"]}`}>
+                <img src={profileImage} alt="" className={`${styles["profile-img"]} ${styles["mg-right"]}`} />
+                <div className="user-wrapper">
+                    <div className={`${styles["user-data"]}`} >
+                        <h3 className={`${styles['user']} ${styles["mg-right"]} ${styles["bold"]}`}>{eachPost.userId?.userName}</h3>
+                        <p className={`${styles["date"]}`}></p>
+                    </div>
+                </div>
+
+            </div>
+            {eachPost?.mediaUrl && <div className={` ${styles["post-data"]}`}>
+                {getIsImageFormat(eachPost?.mediaUrl) ? <img src={`${API_URL}/${eachPost?.mediaUrl}`} alt="" className={`${styles["post-img"]}`} /> : <video controls src={`${API_URL}/${eachPost?.mediaUrl}`} className={`${styles["post-img"]}`} />}
+            </div>}
+            {(eachPost?.mediaUrl && eachPost?.text) && <div className={`${styles["metadata"]}`}>
+                <div className={`${styles["icon-container"]} d-flex justify-content-between`}>
+                    <div>
+                        <p>{eachPost?.text}</p>
+                    </div>
+                </div>
+            </div>}
+            {/* Only Text */}
+            {(!eachPost?.mediaUrl && eachPost?.text) && <div>
+                <div>
+                    <p className={styles['only-text-content']}>{eachPost?.text}</p>
+                </div>
+            </div>}
+
+            <div className={`d-flex justify-content-between ${!eachPost?.text ? 'pt-2' : ''}`}>
+                <div>
+                    <p className={`${styles["menu-date"]}`}>{eachPost?.createdDate ? (new Date(eachPost.createdDate)).toDateString() : null}</p>
+                </div>
+                {localStorage.getItem("USER_ID") === params.profileId && <div className='d-flex justify-content-end'>
+                    <div className='me-3'>
+                        <i className={`fa fa-pencil-square ${styles["icon-size"]}`} aria-hidden="true" onClick={() => navigate(`/edit/${eachPost._id}`)}></i>
+                    </div>
+                    <div className='me-3'>
+                        <i className={`fa fa-trash ${styles["icon-size"]}`} aria-hidden="true"
+                            onClick={() => deleteBeforeConfirmation(eachPost)}></i>
+                    </div>
+
+                </div>}
+            </div>
+        </div>
+    }, [navigate, params.profileId, profileImage]);
+
+    const postsLoading = useMemo(() => {
+        return <LoadingIndicator />
+    }, []);
+
+    const noPostsFound = useMemo(() => {
+        return <NoDataFound />
+    }, []);
+
+
 
     return (
         <div className={`${styles["container"]}`}>
-            <div>
-                <div className={`${styles["profile-container"]} ${styles["profile-image-grid"]}`}>
-                    <div className={`${styles["image-request-button"]}`}>
-                    <img src={profileImage} alt="" className={`${styles["image"]}`} alt={'Profile'}/>
+
+            {postList.loading && postsLoading}
+            {!postList.loading && <>
+                <div>
+                    <div className={`${styles["profile-container"]} ${styles["profile-image-grid"]}`}>
+                        <div className={`${styles["image-request-button"]}`}>
+                            <img src={profileImage} alt="" className={`${styles["image"]}`} alt={'Profile'} />
+                            <div>
+                                {(params?.profileId && localStorage.getItem("USER_ID") !== params?.profileId) && getCollabStatus}
+                            </div>
+                        </div>
                         <div>
-                            {(params?.profileId && localStorage.getItem("USER_ID") !== params?.profileId) && getCollabStatus}
+                            <div>
+                                <p className={`${styles["profile-name-font"]}`}>{`${details?.userDetails?.firstName} ${details?.userDetails?.lastName}`}</p>
+                                <p className={`${styles["profile-username-font"]}`}>{details?.userDetails?.userName}</p>
+                                <p className={`${styles["profile-bio-font"]}`}>{details?.profileDetails?.bio}</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div className={`${styles["main-container"]}`}>
+                    {(!postList.loading && postList?.data?.length > 0) ? postList?.data?.map((eachPost) => postListMemo(eachPost)) : null}
+                    {!postList.loading && postList?.data?.length <= 0 && <>
+                        <div>
+                            <div>
+                                {noPostsFound}
+                            </div>
+                            <div>
+                                <Link to={'/create'}>Create Here</Link>
+                            </div>
+                        </div>
+                    </>}
                     <div>
-                        <div>
-                            <p className={`${styles["profile-name-font"]}`}>{`${details?.userDetails?.firstName} ${details?.userDetails?.lastName}`}</p>
-                            <p className={`${styles["profile-username-font"]}`}>{details?.userDetails?.userName}</p>
-                            <p className={`${styles["profile-bio-font"]}`}>{details?.profileDetails?.bio}</p>
-                        </div>
+                        <ConfirmationModal show={modalShow} handleClose={() => setModalShow(false)} handleSubmit={() => deleteAfterConfirmation()} title="Delete Post">
+                            <p>Are you sure you want to delete this post?</p>
+                        </ConfirmationModal>
+                    </div>
+
+                    <div>
+                        {messageModalPopup.show && <ConfirmationModal show={messageModalPopup.show} handleClose={() => setMessageModalPopup({
+                            show: false,
+                            message: ''
+                        })} handleSubmit={() => sendCollabration()} title="Request Message" submitDisable={!messageModalPopup.message}>
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="Leave a message here" id="floatingTextarea" onChange={(event) => setMessageModalPopup({ ...messageModalPopup, message: event.target.value })}></textarea>
+                                <label for="floatingTextarea">Your Request Message</label>
+                            </div>
+                        </ConfirmationModal>}
                     </div>
                 </div>
-            </div>
-            <div className={`${styles["main-container"]}`}>
-                {postList?.length > 0 ? postList.map((eachPost) => {
-                    return <div className={`${styles["container-profile"]}`} key={eachPost._id}>
-                        <div className={`${styles["header-data"]}`}>
-                            <img src={profileImage} alt="" className={`${styles["profile-img"]} ${styles["mg-right"]}`} />
-                            <div className="user-wrapper">
-                                <div className={`${styles["user-data"]}`} >
-                                    <h3 className={`${styles['user']} ${styles["mg-right"]} ${styles["bold"]}`}>{eachPost.userId?.userName}</h3>
-                                    <p className={`${styles["date"]}`}></p>
-                                </div>
-                            </div>
-
-                        </div>
-                        {eachPost?.mediaUrl && <div className={` ${styles["post-data"]}`}>
-                            {getIsImageFormat(eachPost?.mediaUrl) ? <img src={`${API_URL}/${eachPost?.mediaUrl}`} alt="" className={`${styles["post-img"]}`} /> : <video controls src={`${API_URL}/${eachPost?.mediaUrl}`} className={`${styles["post-img"]}`} />}
-                        </div>}
-                        {(eachPost?.mediaUrl && eachPost?.text) && <div className={`${styles["metadata"]}`}>
-                            <div className={`${styles["icon-container"]} d-flex justify-content-between`}>
-                                <div>
-                                    <p>{eachPost?.text}</p>
-                                </div>
-                            </div>
-                        </div>}
-                        {/* Only Text */}
-                        {(!eachPost?.mediaUrl && eachPost?.text) && <div>
-                            <div>
-                                <p className={styles['only-text-content']}>{eachPost?.text}</p>
-                            </div>
-                        </div>}
-
-                        <div className={`d-flex justify-content-between ${!eachPost?.text ? 'pt-2' : ''}`}>
-                            <div>
-                                <p className={`${styles["menu-date"]}`}>{eachPost?.createdDate ? (new Date(eachPost.createdDate)).toDateString() : null}</p>
-                            </div>
-                            {localStorage.getItem("USER_ID") === params.profileId && <div className='d-flex justify-content-end'>
-                                <div className='me-3'>
-                                    <i className={`fa fa-pencil-square ${styles["icon-size"]}`} aria-hidden="true" onClick={() => navigate(`/edit/${eachPost._id}`)}></i>
-                                </div>
-                                <div className='me-3'>
-                                    <i className={`fa fa-trash ${styles["icon-size"]}`} aria-hidden="true"
-                                        onClick={() => deleteBeforeConfirmation(eachPost)}></i>
-                                </div>
-
-                            </div>}
-                        </div>
-                    </div>
-                })
-                    : <div className={'d-flex align-items-center flex-column pt-4'}>
-                        <div>
-                            <img src={noPost} height={300} width={400} alt='No Post Found' />
-                        </div>
-                        <div>
-                            <Link to={'/create'}>Create Here</Link>
-                        </div>
-                    </div>}
-                <div>
-                    <ConfirmationModal show={modalShow} handleClose={() => setModalShow(false)} handleSubmit={() => deleteAfterConfirmation()} title="Delete Post">
-                        <p>Are you sure you want to delete this post?</p>
-                    </ConfirmationModal>
-                </div>
-
-                <div>
-                    {messageModalPopup.show && <ConfirmationModal show={messageModalPopup.show} handleClose={() => setMessageModalPopup({
-                        show: false,
-                        message: ''
-                    })} handleSubmit={() => sendCollabration()} title="Request Message" submitDisable={!messageModalPopup.message}>
-                        <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a message here" id="floatingTextarea" onChange={(event) => setMessageModalPopup({ ...messageModalPopup, message: event.target.value })}></textarea>
-                            <label for="floatingTextarea">Your Request Message</label>
-                        </div>
-                    </ConfirmationModal>}
-                </div>
-            </div>
+            </>}
         </div>
     )
 }

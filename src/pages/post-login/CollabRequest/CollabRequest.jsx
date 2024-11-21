@@ -4,6 +4,9 @@ import axios from 'axios';
 import { API_URL } from '../../../appConfig';
 import { capitalizeParagraph, openToast, STATUS } from '../../../Utils/utils';
 import { useNavigate } from 'react-router-dom';
+import Title from '../../../shared/components/title/Title';
+import LoadingIndicator from '../../../shared/components/LoadingIndicator/LoadingIndicator';
+import NoDataFound from '../../../shared/components/NodataFound/NoDataFound';
 const deafultProfileImage = '/Images/DefaultProfileImage.webp';
 
 
@@ -25,7 +28,7 @@ const CollabRequest = () => {
         axios.get(`${API_URL}/collab/${userID}`).then((res) => {
             setCollabs({
                 loading: false,
-                data: res.data?.data,
+                data: [],
             });
         }).catch(() => {
             openToast("Unable to fetch Collab details... Please try again ...")
@@ -74,22 +77,20 @@ const CollabRequest = () => {
     }, [collabs?.data, navigate, onApproveOrReject]);
 
     const collabsLoading = useMemo(() => {
-        return <div className={`${styles["loading-container"]}`}>
-            <div className={`spinner-border text-primary ${styles["indicator"]}`} role="status" >
-                <span className="sr-only"></span>
-            </div>
-        </div>
+        return <LoadingIndicator/>
     }, []);
 
     const noCollabsFound = useMemo(() => {
-        return <div>No Collabs found</div>
+        return <NoDataFound/>
     }, []);
 
     return (
         <div className={`${styles["container"]}`}>
             <div className={`${styles["main-card-container"]}`}>
                 <div className={`${styles["card-gap"]}`}>
-                    <h5 className='mb-4'>Notifications</h5>
+                    <div>
+                        <Title heading="Collab Requests" />
+                    </div>
                     {collabs.loading && collabsLoading}
                     {!collabs.loading && collabs?.data?.length ? collabsList : noCollabsFound}
                 </div>

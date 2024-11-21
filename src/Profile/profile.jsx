@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { API_URL } from "../appConfig";
 import { openToast } from "../Utils/utils";
+import Title from "../shared/components/title/Title";
 const deafultProfileImage = '/Images/DefaultProfileImage.webp';
 
 function Profile() {
@@ -37,7 +38,7 @@ function Profile() {
             "country": "",
             "city": "",
             "isActive": false,
-            "openToCollab":false,
+            "openToCollab": false,
             "userId": localStorage.getItem("USER_ID")
         }
     }
@@ -173,7 +174,7 @@ function Profile() {
         }).then((UploadImage) => {
             setLoading(false);
             setIsPreview(false);
-            openToast('Profile picture successfully uploaded',false)
+            openToast('Profile picture successfully uploaded', false)
         }).catch((e) => {
             setLoading(false);
             openToast('Something went wrong...Please try again..!')
@@ -207,7 +208,7 @@ function Profile() {
                         <div>
                             <div className='d-flex justify-content-between pb-2'>
                                 <div>
-                                    <h4>Profile Settings</h4>
+                                    <Title heading="Profile Settings" />
                                 </div>
                                 <div className='text-center'>
                                     <button type="submit" className="btn btn-primary btn-color" disabled={loading}>Update </button>
@@ -226,18 +227,16 @@ function Profile() {
                                             {!ispreview ? <div>
                                                 <i className="fa fa-pencil" aria-hidden="true" onClick={() => onImagecLick()}></i>
                                             </div> :
-                                                <div className='d-flex justify-content-around mb-3'>
+                                                <div className='d-flex justify-content-around mb-3 mt-3'>
                                                     <div>
-                                                        <label htmlFor="save" onClick={() => saveImage()}>Save</label>
+                                                        <button className="btn btn-secondary" onClick={() => saveImage()}>Save</button>
                                                     </div>
                                                     <div className="ms-4">
-                                                        <label htmlFor="cancel" onClick={() => cancelImage()}>Cancel</label>
+                                                        <button className="btn btn-secondary" onClick={() => cancelImage()}>Cancel</button>
                                                     </div>
                                                 </div>}
                                         </div>
-
                                     </div>
-
                                     <div className={`d-flex justify-content-between ${styles["padding-left-20"]} `}>
                                         <div className={styles["email-display"]}>
                                             <p className={`${styles["font-bold"]} mb-1`}>{userDetails.userName}</p>

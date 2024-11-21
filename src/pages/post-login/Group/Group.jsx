@@ -4,6 +4,9 @@ import axios from 'axios';
 import { API_URL } from '../../../appConfig';
 import { openToast } from '../../../Utils/utils';
 import { useNavigate } from 'react-router-dom';
+import Title from '../../../shared/components/title/Title';
+import LoadingIndicator from '../../../shared/components/LoadingIndicator/LoadingIndicator';
+import NoDataFound from '../../../shared/components/NodataFound/NoDataFound';
 
 function Group() {
 
@@ -58,7 +61,7 @@ function Group() {
               <p className={`${styles["p-margin"]} fw-bold fst-bold fs-5`}>{eachGroup?.postDetails?.title}</p>
             </div>
             <div>
-              {eachGroup?.isAdmin && <p className={`${styles["p-margin"]} fw-bold ${styles["date-font"]} ${eachGroup?.isActive ? 'text-success': "text-danger"}`}>{'Admin'}</p>}
+              {eachGroup?.isAdmin && <p className={`${styles["p-margin"]} fw-bold ${styles["date-font"]} ${eachGroup?.isActive ? 'text-success' : "text-danger"}`}>{'Admin'}</p>}
             </div>
           </div>
           <p className={`${styles["p-margin"]} fs-6`}>{eachGroup?.userDetails?.userName}</p>
@@ -71,22 +74,20 @@ function Group() {
   }, [groupsData.data, groupHandler]);
 
   const groupsLoading = useMemo(() => {
-    return <div className={`${styles["loading-container"]}`}>
-      <div className={`spinner-border text-primary ${styles["indicator"]}`} role="status" >
-        <span className="sr-only"></span>
-      </div>
-    </div>
+    return <LoadingIndicator/>
   }, []);
 
   const noGroupsFound = useMemo(() => {
-    return <div>No groups found</div>
+    return <NoDataFound/>
   }, []);
 
   return (
     <div className={`${styles["container"]}`}>
       <div className={`${styles["main-Card-container"]}`}>
         <div className={`${styles["card-gap"]}`}>
-          <h5 className='mb-4'>Groups</h5>
+          <div>
+            <Title heading="Groups" />
+          </div>
           {groupsData.loading && groupsLoading}
           {(!groupsData.loading && groupsData.data?.length <= 0) && noGroupsFound}
           {(!groupsData.loading && groupsData.data?.length) ? groupsList : null}
