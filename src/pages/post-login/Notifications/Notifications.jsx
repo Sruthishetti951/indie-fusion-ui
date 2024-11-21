@@ -4,6 +4,9 @@ import axios from 'axios';
 import { API_URL } from '../../../appConfig';
 import { capitalizeParagraph, NOTIFICATION_TYPES, openToast } from '../../../Utils/utils';
 import { useNavigate } from 'react-router-dom';
+import Title from '../../../shared/components/title/Title';
+import LoadingIndicator from '../../../shared/components/LoadingIndicator/LoadingIndicator';
+import NoDataFound from '../../../shared/components/NodataFound/NoDataFound';
 const deafultProfileImage = '/Images/DefaultProfileImage.webp';
 
 function Notifications() {
@@ -39,25 +42,35 @@ function Notifications() {
         })
     }, []);
 
+    const notificationUpdateStatus = useCallback((notificationId) => {
+        // Silent api
+        const userID = localStorage.getItem('USER_ID');
+        axios.put(`${API_URL}/notifications/${userID}/${notificationId}`).then((res) => {
+        }).catch(() => {
+        })
+    }, []);
+
     useEffect(() => {
         fetchNotifications()
     }, [fetchNotifications]);
 
     const navigateToExternalPage = useCallback((eachNotification) => {
+        notificationUpdateStatus(eachNotification._id);
         if (eachNotification.notificationType === NOTIFICATION_TYPES.GROUP) {
             navigate(`/groups/${eachNotification?.externalId}`);
         } else {
             navigate(`/profile/${eachNotification?.notificationFrom}`);
         }
-    }, [navigate]);
+    }, [navigate, notificationUpdateStatus]);
+
     const notificationsList = useMemo(() => {
         return notifications?.data?.map((eachNotification) => {
-            return <div className={`${styles["main-Card"]} ${styles["card-items"]}`} key={eachNotification._id} role='button' onClick={() => navigateToExternalPage(eachNotification)}>
-                
+            return <div className={`${styles["main-Card"]} ${styles["card-items"]} ${!eachNotification.isRead && styles["unread"]}`} key={eachNotification._id} role='button' onClick={() => navigateToExternalPage(eachNotification)}>
+
                 {eachNotification?.notificationType === NOTIFICATION_TYPES.GROUP && <div>
                     <i className={`fa fa-users ${styles["fafa-icon-size"]}`} aria-hidden="true" ></i>
                 </div>}
-               { eachNotification?.notificationType === NOTIFICATION_TYPES.COLLAB && <div>
+                {eachNotification?.notificationType === NOTIFICATION_TYPES.COLLAB && <div>
                     <img src={eachNotification?.fromUserProfileImage?.imageUrl ? `${API_URL}/${eachNotification?.fromUserProfileImage?.imageUrl}` : deafultProfileImage} alt="Profile Not found" className={`${styles["profile-img"]} ${styles["mg-right"]}`} />
                 </div>}
                 <div>
@@ -69,22 +82,26 @@ function Notifications() {
                 </div>
             </div>
         })
-    }, [notifications?.data]);
+    }, [navigateToExternalPage, notifications?.data]);
 
     const notificationLoading = useMemo(() => {
-        return <div className={`${styles["loading-container"]}`}>
-            <div className={`spinner-border text-primary ${styles["indicator"]}`} role="status" >
-                <span className="sr-only"></span>
-            </div>
-        </div>
+        return <LoadingIndicator/>
     }, []);
+
+    const noPostsFound = useMemo(() => {
+        return <NoDataFound/>
+    }, []);
+
     return (
         <div className={`${styles["container"]}`}>
             <div>
                 <div className={`${styles["card-gap"]}`}>
-                    <h5 className='mb-4'>Notifications</h5>
-                    {notificationsList?.loading && notificationLoading}
-                    {notificationsList?.length > 0 ? notificationsList : null}
+                    <div>
+                        <Title heading="Notifications" />
+                    </div>
+                    {notifications?.loading && notificationLoading}
+                    {(!notifications?.loading &&  notifications?.data?.length <= 0) && noPostsFound}
+                    {notifications?.data?.length > 0 ? notificationsList : null}
                 </div>
             </div>
 

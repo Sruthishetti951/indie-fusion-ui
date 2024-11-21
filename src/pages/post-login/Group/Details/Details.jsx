@@ -55,6 +55,10 @@ function Details() {
                 openToast("Unable to fetch Group details... Please try again ...")
             }
         }).catch(() => {
+            setGroups({
+                loading: false,
+                data: null
+            });
             openToast("Unable to fetch Group details... Please try again ...")
         })
     }, [params.groupId]);

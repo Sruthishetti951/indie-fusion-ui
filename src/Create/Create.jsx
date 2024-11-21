@@ -4,7 +4,7 @@ import axios from 'axios';
 import { API_URL } from '../appConfig';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getIsImageFormat, openToast, POST_TYPES } from '../Utils/utils';
-
+import Title from "../shared/components/title/Title";
 
 function Create() {
     const params = useParams();
@@ -165,8 +165,8 @@ function Create() {
         <div className={styles["createPostCard"]}>
             <div className={`card p-3 ${styles["post-height"]}`}>
                 <div className={`d-flex justify-content-between mb-3`}>
-                    <div className={`${styles["font-size-family"]}`}>
-                        <label htmlFor="text" >{params.postId ? "Update Post" : "Create Post"}</label>
+                    <div>
+                        <Title heading={params.postId ? "Update Post" : "Create Post"} />
                     </div>
                     <div>
                         <label htmlFor="collabPost" className={`${styles["font-size-family"]}`} >Post Type</label>

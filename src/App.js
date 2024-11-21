@@ -9,6 +9,7 @@ import Notifications from './pages/post-login/Notifications/Notifications';
 import styles from "./App.css"
 
 
+
 const LandingPage = lazy(() => import('./LandingPage/LandingPage'));
 const LoginRegister = lazy(() => import('./LoginRegister/LoginRegister'));
 const ForgotPasswordUI = lazy(() => import('./ForgotPassword/ForgotPasswordUI'));
@@ -22,6 +23,8 @@ const Groups = lazy(() => import('./pages/post-login/Group/Group'));
 const Events = lazy(() => import('./pages/post-login/Events/Events'));
 const CollabRequest = lazy(() => import('./pages/post-login/CollabRequest/CollabRequest'));
 const Details = lazy(() => import('./pages/post-login/Group/Details/Details'));
+const Search=lazy(()=>import('./pages/post-login/Search/Search'));
+const EventDetails=lazy(()=>import('./pages/post-login/Events/EventDetails/EventDetails')) ;
 
 function App() {
   return (
@@ -50,6 +53,9 @@ function App() {
               <Route path='notifications' element={<Notifications />} />
               <Route path='collab-request' element={<CollabRequest />} />
               <Route path='groups/:groupId' element={<Details />} />
+              <Route path='search' element={<Search />} />
+              <Route path='events/:id' element={<EventDetails />} />
+              <Route path='post/:id' element={<EventDetails />} />
             </Route>
             <Route path='*' element={<NotFound />} />
           </Routes>

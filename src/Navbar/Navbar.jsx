@@ -18,7 +18,7 @@ function Navbar() {
     return (
         <div className={styles["side-nav-bar"]}>
             <div className='mb-5'>
-                <p className={`${styles["title"]}`}>Indie Fusion</p>
+                <label className={`${styles["title"]}`}>Indie Fusion</label>
             </div>
             <div className='text-center'>
                 <div>
@@ -39,7 +39,7 @@ function Navbar() {
                 </div>
 
                 <div>
-                    <NavLink to='' className={`d-flex ${styles['remove-anchor-defaults']}`} style={getActiveStyles}>
+                    <NavLink to='/search' className={`d-flex ${styles['remove-anchor-defaults']}`} style={getActiveStyles}>
                         <div className={`d-flex ${styles['nav-containers']}`}>
                             <i className={`fa fa-search ${styles["icon-name-font"]}`} aria-hidden="true"></i>
                             <p className={styles["nav-names"]}>Search</p>

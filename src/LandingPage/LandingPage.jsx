@@ -5,6 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./LandingPage.css";
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 const abc = '/Images/Images_landing/artist-icon.png';
 
 const LandingPage = () => {
@@ -49,12 +50,12 @@ const LandingPage = () => {
                 <Nav.Link href="#link" className="nav-item">
                   Contact Us
                 </Nav.Link>
-                <Nav.Link href="#link" className="nav-item">
+                <Nav.Link href="" className="nav-item">
                   Sign Up
                 </Nav.Link>
-                <Nav.Link href="#link" className="nav-item">
+                <NavLink to={'/login'} className="nav-item">
                   Sign In
-                </Nav.Link>
+                </NavLink>
               </Nav>
             </Navbar.Collapse>
           </Container>
