@@ -228,12 +228,12 @@ function Profile() {
                                                 <i className="fa fa-pencil" aria-hidden="true" onClick={() => onImagecLick()}></i>
                                             </div> :
                                                 <div className='d-flex justify-content-around mb-3 mt-3'>
+                                                    <div className="me-2">
+                                                        <button className="btn btn-secondary btn-sm" onClick={() => cancelImage()}>Cancel</button>
+                                                    </div>
                                                     <div>
-                                                        <button className="btn btn-secondary" onClick={() => saveImage()}>Save</button>
-                                                    </div>
-                                                    <div className="ms-4">
-                                                        <button className="btn btn-secondary" onClick={() => cancelImage()}>Cancel</button>
-                                                    </div>
+                                                        <button className="btn btn-primary btn-sm" onClick={() => saveImage()}>Save</button>
+                                                    </div> 
                                                 </div>}
                                         </div>
                                     </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { API_URL } from '../../../../appConfig';
 import {  openToast } from '../../../../Utils/utils';
 import PostCard from '../../post-card/PostCard';
@@ -14,7 +14,6 @@ function EventDetails() {
         loading: false,
         data: null
     });
-    const navigate = useNavigate();
 
     const params = useParams();
 
@@ -50,11 +49,6 @@ function EventDetails() {
     useEffect(() => {
         fetchCurrentUserGroupDetails();
     }, [fetchCurrentUserGroupDetails, params.groupId]);
-
-
-    const navigateToProfile = useCallback((eachMember) => {
-        navigate(`/profile/${eachMember?.userDetails?._id}`);
-    }, [navigate]);
 
     const groupDetailsLoading = useMemo(() => {
         return <div className={`${styles["loading-container"]}`}>

@@ -220,9 +220,20 @@ function Details() {
     const usersList = useMemo(() => {
         if (groupsData?.data?.members.length <= 0) {
             if (groupsData?.data?.requestedMember?.status === STATUS.REJECTED) {
-                return <p>Your request has been rejected. You cannot view any members in this group.</p>
+                return <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <i className="fa fa-exclamation-triangle fs-2" aria-hidden="true"></i>&nbsp;
+                    <div>
+                        <strog>Request Denied</strog>: You do not have access to view the members of this group.
+                    </div>
+                </div>
+
             }
-            return <p>Your request is still pending. The admin needs to approve it.</p>
+            return <div className="alert alert-secondary d-flex align-items-center mt-2 ms-2" role="alert">
+                <i className="fa fa-exclamation-triangle fs-2" aria-hidden="true"></i>&nbsp;
+                <div className='ps-2'>
+                    <strog>Request Pending</strog>: Your request is awaiting admin approval..!
+                </div>
+            </div>
         }
         const userId = localStorage.getItem('USER_ID');
         return groupsData?.data?.members?.map((eachMember) => {
@@ -272,9 +283,9 @@ function Details() {
         setExistModalDetails({
             showConfirmation: true,
             modalMessage: groupsData?.data?.requestedMember?.isAdmin ?
-                isDeactivate ? "Once you deactivate you can activate at any time"
-                    : "If you delete group whole group will exit including all the members in the group" :
-                "If you exit the group you can not see this group. You have to re-request for admin approval.",
+                isDeactivate ? " You can reactivate your group at any time after deactivation"
+                    : "If you proceed with deleting the group, all members will be exited along with the group" :
+                "Leaving the group will revoke your access, requiring a new request and admin approval to join again.",
             modalTitle: "Confirmation",
             postDetails: groupsData?.data?.postDetails,
             isDeactivate
@@ -285,18 +296,17 @@ function Details() {
         return <>
             <div className='d-flex justify-content-between pb-2'>
                 <div>
-                    {!groupsData?.data?.isActive && <p className='text-danger fs-6 fw-bold'>This group is inactive</p>}
+                    {!groupsData?.data?.isActive && <div class="alert alert-danger" role="alert">
+                        <i className="fa fa-exclamation-triangle fs-5" aria-hidden="true"></i>&nbsp;
+                        Group Not Operational
+                    </div>}
                 </div>
                 <div>
                     {groupsData.data?.requestedMember?.isAdmin && <button onClick={() => exitGroupBeforeConfirmation(true)} className='btn btn-primary'>
                         {groupsData?.data?.isActive ? 'Deactivate Group' : "Activate Group"}
-                        {/* &nbsp; */}
-                        {/* <i className="fa fa-ban" aria-hidden="true"></i> */}
                     </button>}&nbsp;
                     <button onClick={() => exitGroupBeforeConfirmation()} className='btn btn-primary'>
                         Exit Group
-                        {/* &nbsp; */}
-                        {/* <i className="fa fa-sign-out" aria-hidden="true"></i> */}
                     </button>
                 </div>
             </div>

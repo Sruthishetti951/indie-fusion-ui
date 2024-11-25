@@ -258,7 +258,7 @@ function MyProfilePage() {
                 <div>
                     <div className={`${styles["profile-container"]} ${styles["profile-image-grid"]}`}>
                         <div className={`${styles["image-request-button"]}`}>
-                            <img src={profileImage} alt="" className={`${styles["image"]}`} alt={'Profile'} />
+                            <img src={profileImage} className={`${styles["image"]}`} alt={'Profile'} />
                             <div>
                                 {(params?.profileId && localStorage.getItem("USER_ID") !== params?.profileId) && getCollabStatus}
                             </div>

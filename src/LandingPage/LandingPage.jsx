@@ -2,173 +2,155 @@
 import { Container } from 'react-bootstrap';
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./LandingPage.css";
-import React, { useState } from "react";
+import React from "react";
 
 const LandingPage = () => {
 
-    const [activeCard, setActiveCard] = useState(1); 
 
-    const cards = [
-      {
-        id: 1,
-        title: "Spotlight",
-        title2: "Showcases",
-        description: "Step into the limelight! Showcase your work with a personalized profile, get featured, and join regular community events.",
-        image: "/Images/artist-icon.png",
-      },
-      {
-        id: 2,
-        title: "Creative",
-        title2:"Collab",
-        description: "Create together, grow together. Connect with like-minded artists, dive into new genres, and collaborate to make art that breaks boundaries.",
-        image: "/Images/collab-icon.png",
-      },
-      {
-        id: 3,
-        title: "Events",
-        title2:"Exposure",
-        description: "Your stage awaits! From virtual concerts to art exhibitions, join events that bring your art to audiences who'll love what you create.",
-        image: "/Images/event-icon.png",
-      },
-    ];
-  
+  const cards = [
+    {
+      id: 1,
+      title: "b",
+      description: "one collaborations. Discover and connect with inspiring artists for one-on-Check their availability and start creating magic together!",
+      image: "/Images/Images_landing/Indie_artist.png",
+    },
+    {
+      id: 2,
+      title: "Collaborate in Groups",
+      description: "Team up with like-minded creators in dynamic groups. Share ideas, manage members, and bring bold visions to life!",
+      image: "/Images/collab.png",
+    },
+    {
+      id: 3,
+      title: "Events",
+      description: "Host or join exciting events to showcase your talent. Manage participants, adjust schedules, and take center stage!",
+      image: "/Images/event.png",
+    },
+  ];
+
   return (
     <div>
       <div className="page-wrapper landing-page">
-        <Navbar expand="lg" className="navbar">
-          <Container>
+        <Navbar expand="lg" className="navbar header-footer-color">
+          <div className='w-100'>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto justify-content-center w-100">
+              <Nav className="me-auto justify-content-center w-100 col-gap">
                 <Nav.Link href="/" className="nav-item">
                   Home
+                </Nav.Link>
+                <Nav.Link href="#weprovide" className="nav-item">
+                  We Provide
+                </Nav.Link>
+                <Nav.Link href="#features" className="nav-item">
+                  Features
+                </Nav.Link>
+                <Nav.Link href="#mission" className="nav-item">
+                  Mission
                 </Nav.Link>
                 <Nav.Link href="#aboutUs" className="nav-item">
                   About Us
                 </Nav.Link>
-                <Nav.Link href="#contactUs" className="nav-item">
-                  Contact Us
-                </Nav.Link>
                 <Nav.Link href="/login" className="nav-item">
-                Register/Login
+                  Register/Login
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>
-          </Container>
+          </div>
         </Navbar>
         <main>
-        <Container className="main-container">
-          <Row className="section1">
-            <Col sm={12} md={6} className="left-col">
-              <h1>Indie</h1>
-              <h1>Fusion</h1>
-              <p>"Where Creativity Finds Its Rhythm"</p>
-            </Col>
-            <Col sm={12} md={6} className="right-col">
-              <img src="/Images/Image1.png" alt="Hero Image" />
-            </Col>
-          </Row>
-          
-          <Row className="section1 section2" id="aboutUs">
-            <h1>Where Creators Connect?</h1>
-            <Col sm={12} md={6} className="right-col">
-              <img src="/Images/collab.png" alt="About Image" />
-            </Col>
-            <Col sm={12} md={6} className="left-col">
-              <p>Welcome to Indie Fusion Artist, where creative souls come together to craft something extraordinary! 
-                Our platform is more than just a space—it's a movement for artists who want to blend genres, break boundaries, and create art that's as unique as they are.
-                </p>
-            </Col>
-            
-          </Row>
-
-          <Row className="cards-section section1 section3">
-            <h1>What We Offer</h1>
-            {cards.map((card) => (
-              <Col
-                key={card.id}
-                md={4}
-                className={`card-col ${activeCard === card.id ? "active-card" : ""}`}
-                onClick={() => setActiveCard(card.id)}
-              >
-                <div className="card">
-                  <img src={card.image} alt={card.title} className="card-image" />
-                  <h3>{card.title} <span>{card.title2}</span></h3>
-                  <p>{card.description}</p>
-                </div>
+          <div className="main-container">
+            <div className="section1 pt-5">
+              <Col sm={12} md={6} className="left-col">
+                <h1>Indie</h1>
+                <h1>Fusion</h1>
+                <p>"Where Artists Unite, Collaborate, and Create."</p>
               </Col>
-            ))}
-          </Row>
-          <Row className="section1 section2">
-            <h1>Our Mission - Connect. Create. Inspire.</h1>
-            
-            <Col sm={12} md={6} className="left-col">
-              <p>At Indie Fusion, we're all about lifting up independent artists with a space to connect, create, and conquer. Here, you're not just sharing your art—you.re joining a movement. Showcase your talents, team up with fellow visionaries, and tap into resources to fuel your craft. This is your hub for breaking molds, blending genres, and reaching audiences craving something bold and original.
-</p>
-            </Col>
-            <Col sm={12} md={6} className="right-col">
-              <img src="/Images/mission2.png" alt="About Image" />
-            </Col>
-          </Row>
+              <Col sm={12} md={6} className="right-col">
+                <img src="/Images/Image1.png" alt="Hero" />
+              </Col>
+            </div>
 
-           
+            <div className="background-color p-5" id="weprovide">
+              <div className='pb-5'>
+                <h2 className='side-headings text-center'>Unleash Your Creativity with Indie Fusion</h2>
+              </div>
+              <div className='content-section'>
+                <div>
+                  <img src="/Images/painter.png" alt="About" className='w-100' />
+                </div>
+                <div>
+                  <h6 className='content'>Unleash your artistry and connect with a vibrant community of musicians, designers, performers, and visionaries. Showcase your talent, spark collaborations, and bring impactful projects to life.
+                    From one-on-one partnerships to unforgettable events, Indie Fusion empowers you to create without limits. Join us, share your passion, and make your mark in a world where dreams become reality. Let’s create something extraordinary together!
+                  </h6>
+                </div>
+              </div>
 
-            
-        </Container>
+            </div>
+
+            <div id="features">
+              <div className='pt-5'>
+                <h2 className='side-headings text-center'>Our Features</h2>
+              </div>
+              <div className='p-5 explore-cards'>
+                {
+                  cards.map((card) => {
+                    return <div>
+                      <div className='card p-3'>
+                        <img src={card.image} alt={card.title} className="card-image " />
+                        <h3 className='pt-3'>{card.title} <span>{card.title2}</span></h3>
+                        <p>{card.description}</p>
+                      </div>
+                    </div>
+                  })
+                }
+              </div>
+            </div>
+
+            <div className="background-color p-5" id="mission">
+              <div className='pb-5'>
+                <h2 className='side-headings text-center'>Our Mission</h2>
+              </div>
+              <div className='content-section reverse-dir '>
+                <div>
+                  <img src="/Images/mission2.png" alt="About" className='w-100' />
+                </div>
+                <div>
+                  <h6 className='content text-start'>To empower independent artists worldwide by providing a collaborative platform that fosters connection, creativity, and growth. We aim to bridge the gap between talent and opportunity, helping artists thrive in their artistic journeys.
+                  </h6>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="p-5 bg-transparent-color" id="aboutUs">
+              <div className='pb-4'>
+                <h2 className='side-headings text-center'>About Us</h2>
+              </div>
+              <div className='content-section'>
+                <div>
+                  <img src="/Images/about-us.avif" alt="About" className='w-100' />
+                </div>
+                <div>
+                  <h6 className='content'>
+                    Indie Fusion is a vibrant platform designed to connect independent artists from diverse fields, enabling them to showcase their talents, collaborate on creative projects, and organize impactful events. Our mission is to foster a supportive community where innovation thrives, and artists can seamlessly network, share their passion, and bring their artistic visions to life. At Indie Fusion, we believe in the power of collaboration to fuel creativity and elevate independent artistry.
+                  </h6>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </main>
         <footer>
-            <Container fluid className="footer">
+          <Container fluid className="footer header-footer-color">
             <Container>
-              <Row className='socialIcon'>
-                <Col md={4} id="contactUs">
-                <p>Contact Us <br/> <a href="mailto:admin@gmail.com">admin@gmail.com</a></p>
-                </Col>
-                <Col md={4}><ul>
-                <li>
-                      <a href="https://www.facebook.com"
-                        ><i class="fab fa-facebook-f"></i
-                      ></a>
-                    </li>
-                    <li>
-                      <a href="https://www.linkedin.com"
-                        ><i class="fab fa-linkedin"></i
-                      ></a>
-                    </li>
-                    <li>
-                      <a href="https://www.whatsapp.com"
-                        ><i class="fab fa-whatsapp"></i
-                      ></a>
-                    </li>
-                    <li>
-                      <a href="https://www.twitter.com"
-                        ><i class="fab fa-twitter"></i
-                      ></a>
-                    </li>
-                    <li>
-                      <a href="https://www.instagram.com"
-                        ><i class="fab fa-instagram"></i
-                      ></a>
-                    </li>
-                </ul>
-                </Col>
-              <Col md={4}>
-              <ul>
-                <li><a href="#"></a>Privacy Policy</li>
-                <span> | </span>
-                <li><a href="#"></a>Terms and Condition</li>
-              </ul>
-              </Col>
-              </Row>
-              <Row>
-              <p>
-              &copy; Copyright ~ Team 1</p>
-            </Row>
+              <p className='text-center copy-right mb-0'>
+                &copy; Copyright 2024 ~ Indie Fusion</p>
             </Container>
-            
-            </Container>
+
+          </Container>
         </footer>
       </div>
     </div>
