@@ -51,7 +51,6 @@ function Search() {
 
 
     const searchAPI = (data) => {
-        console.log(data);
         setDetails({
             data: null,
             loading: true
@@ -59,7 +58,6 @@ function Search() {
         const userId = localStorage.getItem("USER_ID")
         axios.post(`${API_URL}/search/${userId}`, data).then((res) => {
             if (res?.status === 200) {
-                console.log(res.data?.data);
                 setDetails({
                     data: res.data?.data,
                     loading: false
@@ -90,8 +88,9 @@ function Search() {
     }
 
     const list = useMemo(() => {
+        const userId = localStorage.getItem('USER_ID');
         return details?.data?.map((eachItem) => {
-            return <div className={`${styles["main-Card"]} ${styles["card-items"]}`} key={eachItem?._id} role='button' onClick={() => navigate(`/profile/${eachItem?.userDetails?._id}`)}>
+            return eachItem?.userDetails?._id !== userId && <div className={`${styles["main-Card"]} ${styles["card-items"]} ${!eachItem?.openToCollab ? styles["inactive-user"] : null}`} key={eachItem?._id} role='button' onClick={() => navigate(`/profile/${eachItem?.userDetails?._id}`)}>
                 <img src={eachItem?.profileImage?.imageUrl ? `${API_URL}/${eachItem?.profileImage?.imageUrl}` : deafultProfileImage} className={`${styles["profile-img"]} ${styles["mg-right"]}`} alt={'profile img'} />
                 <div>
                     <p className={`fw-bold ${styles["p-margin"]}`}>{eachItem?.userDetails?.userName}</p>
@@ -117,7 +116,7 @@ function Search() {
                         <Title heading="Browse, Connect, Collaborate with Top Talent" />
                     </div>
                     <form onSubmit={handleSubmit(searchAPI)}>
-                        <input className="form-control me-2 mt-3" type="search" placeholder="Search by Firstname, Lastname, Email, Skills" aria-label="Search" {
+                        <input className="form-control me-2 mt-3" type="search" placeholder="Search by First name, Last name, User name, Email, Skills" aria-label="Search" {
                             ...register('searchTerm')
                         } />
                         <div className='d-flex mt-3'>

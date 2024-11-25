@@ -59,10 +59,11 @@ function ForgotPasswordUI() {
                                 {forgotStatus.successMessage}
                             </div>}
                             <div>
-                                    <div>
+                                <div>
+                                    <div className="text-center">
                                         <label htmlFor="email" >Email</label>
                                     </div>
-                                    <div className="mb-3">
+                                    <div className="mb-3 text-center">
                                         <input type="email" id="email" className="input-box "
                                             {
                                             ...register('email', {
@@ -71,13 +72,14 @@ function ForgotPasswordUI() {
                                             } />
                                         <p className="text-danger">{errors.email && errors.email.message}</p>
                                     </div>
-                                    <div className='text-center'>
-                                        <button type="submit" className={`btn btn-primary ${styles['btn-color']}`} disabled={forgotStatus.isLoading}>{forgotStatus.isLoading ? 'Loading...' : 'Submit'}</button>
-                                    </div>
-                                    <div className="d-flex justify-content-center">
-                                        <i className="fa fa-long-arrow-left mt-1" aria-hidden="true"></i>
-                                        <p className={`${styles["fontSize"]}`}><Link to={'/login'}>Back to Login</Link></p>
-                                    </div>
+                                </div>
+                                <div className='text-center'>
+                                    <button type="submit" className={`btn btn-primary ${styles['btn-color']}`} disabled={forgotStatus.isLoading}>{forgotStatus.isLoading ? 'Loading...' : 'Submit'}</button>
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <i className="fa fa-long-arrow-left mt-1" aria-hidden="true"></i>
+                                    <p className={`${styles["fontSize"]}`}><Link to={'/login'}>Back to Login</Link></p>
+                                </div>
                             </div>
                         </div>
                     </div>

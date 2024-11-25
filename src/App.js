@@ -2,15 +2,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import Profile from './Profile/profile';
 import AuthLayout from './AuthLayout/AuthLayout';
 import { ToastContainer } from 'react-toastify';
-import Notifications from './pages/post-login/Notifications/Notifications';
+
 import styles from "./App.css"
 
 
 
 const LandingPage = lazy(() => import('./LandingPage/LandingPage'));
+const Profile  = lazy(() => import('./Profile/profile'));
+const Notifications = lazy(() => import('./pages/post-login/Notifications/Notifications'));
 const LoginRegister = lazy(() => import('./LoginRegister/LoginRegister'));
 const ForgotPasswordUI = lazy(() => import('./ForgotPassword/ForgotPasswordUI'));
 const ResetPassword = lazy(() => import('./ResetPassword/ResetPassword'));
@@ -42,7 +43,7 @@ function App() {
             <Route path='' element={<AuthLayout />}>
               <Route index element={<Dashboard />} />
               <Route path='reset-password' element={<ResetPassword />} />
-              <Route path='profile-update' element={<Profile />} />
+              <Route path='profile' element={<Profile />} />
               <Route path='dashboard' element={<Dashboard />} />
               <Route path='create' element={<Create />} />
               <Route path='edit/:postId' element={<Create />} />

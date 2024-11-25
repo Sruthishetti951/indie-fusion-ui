@@ -35,7 +35,9 @@ function Create() {
                 setFormState({
                     text: responseData.text,
                     type: responseData.type,
-                    title: responseData?.title
+                    title: responseData?.title,
+                    startDate: responseData?.startDate,
+                    endDate: responseData?.endDate
                 });
                 if (responseData?.mediaUrl) {
                     setBlobPost(`${API_URL}/${responseData.mediaUrl}`);
@@ -188,14 +190,14 @@ function Create() {
                     </div>
                     <div className={`mb-3`}>
                         {formState?.type === POST_TYPES.EVENT && <div className="form-floating">
-                            <input type='date' className="form-control" placeholder="Start Date" id="start-date" value={formState.startDate} onChange={(event) => setFormState({ ...formState, startDate: event.target.value })} />
+                            <input type='date' min={new Date().toJSON().slice(0, 10)} className="form-control" placeholder="Start Date" id="start-date" value={formState.startDate} onChange={(event) => setFormState({ ...formState, startDate: event.target.value })} />
                             <label htmlFor="start-date">Start Date</label>
                         </div>}
                     </div>
 
                     <div className={`mb-3`}>
                         {formState?.type === POST_TYPES.EVENT && <div className="form-floating">
-                            <input type='date' className="form-control" placeholder="End Date" id="end-date" value={formState.endDate} onChange={(event) => setFormState({ ...formState, endDate: event.target.value })} />
+                            <input type='date' min={new Date().toJSON().slice(0, 10)} className="form-control" placeholder="End Date" id="end-date" value={formState.endDate} onChange={(event) => setFormState({ ...formState, endDate: event.target.value })} />
                             <label htmlFor="end-date">End Date</label>
                         </div>}
                     </div>

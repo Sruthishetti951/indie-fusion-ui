@@ -28,7 +28,7 @@ const CollabRequest = () => {
         axios.get(`${API_URL}/collab/${userID}`).then((res) => {
             setCollabs({
                 loading: false,
-                data: [],
+                data: res.data?.data,
             });
         }).catch(() => {
             openToast("Unable to fetch Collab details... Please try again ...")
@@ -89,7 +89,7 @@ const CollabRequest = () => {
             <div className={`${styles["main-card-container"]}`}>
                 <div className={`${styles["card-gap"]}`}>
                     <div>
-                        <Title heading="Collab Requests" />
+                        <Title heading="My Collaborations" />
                     </div>
                     {collabs.loading && collabsLoading}
                     {!collabs.loading && collabs?.data?.length ? collabsList : noCollabsFound}
