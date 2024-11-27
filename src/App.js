@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import AuthLayout from './AuthLayout/AuthLayout';
 import { ToastContainer } from 'react-toastify';
@@ -31,7 +31,7 @@ function App() {
   return (
     <div className={`${styles["main-background-color"]}`}>
       <ToastContainer />
-      <HashRouter>
+      <BrowserRouter>
         <Suspense fallback={<h1>Loading...</h1>}>
           <Routes>
 
@@ -61,7 +61,7 @@ function App() {
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Suspense>
-      </HashRouter>
+      </BrowserRouter>
     </div>
   );
 }

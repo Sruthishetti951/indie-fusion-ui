@@ -5,7 +5,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Col from "react-bootstrap/Col";
 import "./LandingPage.css";
 import React from "react";
-import { NavLink } from 'react-router-dom';
 
 const LandingPage = () => {
 
@@ -54,9 +53,9 @@ const LandingPage = () => {
                 <Nav.Link href="#aboutUs" className="nav-item">
                   About Us
                 </Nav.Link>
-                <NavLink to="/login" className="nav-item">
+                <Nav.Link to="/login" className="nav-item">
                   Register/Login
-                </NavLink>
+                </Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </div>
