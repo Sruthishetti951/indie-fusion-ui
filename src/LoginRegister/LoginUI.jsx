@@ -41,7 +41,6 @@ function LoginUI(props) {
                 reset();
                 localStorage.setItem('USER_ID', response.data.data?._id);
                 localStorage.setItem('userName', response.data.data?.userName);
-                console.log(response.data.data?.userName);
                 navigation('/profile');
             } else {
                 setLoginStatus({

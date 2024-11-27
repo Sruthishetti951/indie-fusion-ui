@@ -12,7 +12,6 @@ function AuthLayout() {
     useEffect(() => {
         const interval = setInterval(() => {
             fetchNotifications().then((res) => {
-                console.log(res?.data);
                 const count = res?.data?.data?.filter((obj) => !obj.isRead)?.length ?? [];
                 setNotificationCount(count)
             });

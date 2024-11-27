@@ -64,7 +64,7 @@ function ForgotPasswordUI() {
                                         <label htmlFor="email" >Email</label>
                                     </div>
                                     <div className="mb-3 text-center">
-                                        <input type="email" id="email" className="input-box "
+                                        <input type="email" id="email" className={`${styles['input-box']}`}
                                             {
                                             ...register('email', {
                                                 required: 'Email is required'
