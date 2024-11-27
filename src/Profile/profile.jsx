@@ -171,7 +171,7 @@ function Profile() {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
-        }).then((UploadImage) => {
+        }).then(() => {
             setLoading(false);
             setIsPreview(false);
             openToast('Profile picture successfully uploaded', false)
@@ -232,7 +232,7 @@ function Profile() {
                                                         <button className="btn btn-secondary btn-sm" onClick={() => cancelImage()}>Cancel</button>
                                                     </div>
                                                     <div>
-                                                        <button className="btn btn-primary btn-sm" onClick={() => saveImage()}>Save</button>
+                                                        <button className="btn btn-primary btn-sm" type="button" onClick={() => saveImage()}>Save</button>
                                                     </div> 
                                                 </div>}
                                         </div>

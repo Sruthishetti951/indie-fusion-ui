@@ -12,7 +12,7 @@ export const getIsImageFormat = (fileName) => {
 export const openToast = (message, isError = true) => {
     toast[isError ? 'error' : 'success'](message, {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 10000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
