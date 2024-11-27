@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import AuthLayout from './AuthLayout/AuthLayout';
 import { ToastContainer } from 'react-toastify';
