@@ -32,7 +32,7 @@ function App() {
     <div className={`${styles["main-background-color"]}`}>
       <ToastContainer />
       <HashRouter>
-        <Suspense fallback={<h1>Loading...</h1>}>
+        <Suspense fallback={<span>Loading...</span>}>
           <Routes>
 
             <Route path='' element={<PreLoginLayout />}>
