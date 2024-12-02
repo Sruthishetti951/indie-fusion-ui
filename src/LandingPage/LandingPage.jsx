@@ -5,6 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Col from "react-bootstrap/Col";
 import "./LandingPage.css";
 import React from "react";
+import { NavLink } from 'react-router-dom';
 
 const LandingPage = () => {
 
@@ -12,7 +13,7 @@ const LandingPage = () => {
   const cards = [
     {
       id: 1,
-      title: "b",
+      title: "Individual Artists Collab",
       description: "one collaborations. Discover and connect with inspiring artists for one-on-Check their availability and start creating magic together!",
       image: "/Images/Images_landing/Indie_artist.png",
     },
@@ -30,6 +31,13 @@ const LandingPage = () => {
     },
   ];
 
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" }); // Smooth scrolling
+    }
+  };
+
   return (
     <div>
       <div className="page-wrapper landing-page">
@@ -38,24 +46,24 @@ const LandingPage = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto justify-content-center w-100 col-gap">
-                <Nav.Link href="/" className="nav-item">
+                <NavLink to="#" onClick={() => scrollToSection("/")} className="nav-item text-decoration-none">
                   Home
-                </Nav.Link>
-                <Nav.Link href="#weprovide" className="nav-item">
+                </NavLink>
+                <NavLink to="#" onClick={() => scrollToSection("weprovide")} className="nav-item text-decoration-none">
                   We Provide
-                </Nav.Link>
-                <Nav.Link href="#features" className="nav-item">
+                </NavLink>
+                <NavLink to="#" onClick={() => scrollToSection("features")} className="nav-item text-decoration-none">
                   Features
-                </Nav.Link>
-                <Nav.Link href="#mission" className="nav-item">
+                </NavLink>
+                <NavLink to="#" onClick={() => scrollToSection("mission")} className="nav-item text-decoration-none">
                   Mission
-                </Nav.Link>
-                <Nav.Link href="#aboutUs" className="nav-item">
+                </NavLink>
+                <NavLink to="#" onClick={() => scrollToSection("aboutUs")} className="nav-item text-decoration-none">
                   About Us
-                </Nav.Link>
-                <Nav.Link to="/login" className="nav-item">
+                </NavLink>
+                <NavLink to={'/login'} className="nav-item text-decoration-none">
                   Register/Login
-                </Nav.Link>
+                </NavLink>
               </Nav>
             </Navbar.Collapse>
           </div>

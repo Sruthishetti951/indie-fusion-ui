@@ -167,8 +167,8 @@ function MyProfilePage() {
         if (!collabStatus?.userId) {
             if (!collabEnabled) {
                 return <div className={`badge bg-secondary btn-sm`}>
-                Collab Unavailable
-            </div>
+                    Collab Unavailable
+                </div>
             }
             return <button className='btn btn-primary' onClick={() => setMessageModalPopup({
                 show: true,
@@ -187,7 +187,10 @@ function MyProfilePage() {
             </>
         } else if (collabStatus?.userId?._id === user_id) {
             return <>
-                <button className='btn btn-primary'>{capitalizeParagraph(collabStatus?.status)}</button>&nbsp;
+                {/* <button className='btn btn-primary'>{capitalizeParagraph(collabStatus?.status)}</button>&nbsp; */}
+                <div className={`badge bg-secondary btn-sm`}>
+                    {capitalizeParagraph(collabStatus?.status)}
+                </div>&nbsp;
                 <button className='btn btn-primary' onClick={() => onCancelRequest(false)}>{'Cancel Request'}</button>
             </>;
         }
