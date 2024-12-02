@@ -209,6 +209,7 @@ function Profile() {
                             <div className='d-flex justify-content-between pb-2'>
                                 <div>
                                     <Title heading="Profile Settings" />
+                                    <span className="badge bg-secondary btn-sm p-2">Your post will remain private until your account is Active.</span>
                                 </div>
                                 <div className='text-center'>
                                     <button type="submit" className="btn btn-primary btn-color" disabled={loading}>Update </button>
